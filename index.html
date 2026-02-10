@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Comic Sans MS', cursive;
+        overflow: hidden;
+    }
+
+    #box {
+        background: white;
+        padding: 40px;
+        border-radius: 25px;
+        text-align: center;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        z-index: 10;
+        position: relative;
+    }
+
+    h1 {
+        font-size: 32px;
+        margin-bottom: 30px;
+    }
+
+    button {
+        font-size: 22px;
+        padding: 15px 30px;
+        margin: 10px;
+        border-radius: 15px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    #yes {
+        background: #ff4d6d;
+        color: white;
+        z-index: 20;
+    }
+
+    #no {
+        background: #ccc;
+    }
+
+    #gallery {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.8);
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        z-index: 20;
+    }
+
+    #gallery img {
+        width: 300px;
+        border-radius: 20px;
+        margin: 10px;
+    }
+
+    #loveText {
+        color: white;
+        font-size: 40px;
+        margin-top: 20px;
+        display: none;
+        font-weight: bold;
+        text-shadow: 0 0 10px red;
+    }
+
+    .heart {
+        position: fixed;
+        top: -20px;
+        font-size: 24px;
+        animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+        to {
+            transform: translateY(110vh);
+            opacity: 0;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div id="box">
+    <h1>Will you be my Valentine? 💘</h1>
+    <button id="yes">YES 💖</button>
+    <button id="no">NO 🙃</button>
+</div>
+
+<div id="gallery">
+    <img id="photo" src="poze 2/1.jpg">
+    <div id="loveText">Zâmbește, Răducu te iubește! ❤️</div>
+</div>
+
+<audio id="music" src="love 2.mp3"></audio>
+
+<script>
+    const yesBtn = document.getElementById("yes");
+    const noBtn = document.getElementById("no");
+    const gallery = document.getElementById("gallery");
+    const photo = document.getElementById("photo");
+    const music = document.getElementById("music");
+    const loveText = document.getElementById("loveText");
+
+    let yesScale = 1;
+    let photoIndex = 1;
+    let noClicks = 0;
+
+    // Când apasă pe NU → YES crește mai lent
+    noBtn.addEventListener("click", () => {
+        noClicks++;
+
+        // crește mai încet
+        yesScale += 0.2;
+
+        // la ultimul click (al 5-lea), YES acoperă toată caseta
+        if (noClicks === 5) {
+            yesBtn.style.transform = "scale(8)";
+        } else {
+            yesBtn.style.transform = `scale(${yesScale})`;
+        }
+    });
+
+    // Când apasă pe YES → pornește muzica + pozele + textul
+    yesBtn.addEventListener("click", () => {
+        music.currentTime = 46; // începe de la secunda 46
+        music.play();
+
+        gallery.style.display = "flex";
+        document.getElementById("box").style.display = "none";
+
+        // schimbă pozele
+        setInterval(() => {
+            photoIndex++;
+            if (photoIndex > 4) photoIndex = 1;
+            photo.src = `poze 2/${photoIndex}.jpg`;
+        }, 2000);
+
+        // afișează textul după 1 secundă
+        setTimeout(() => {
+            loveText.style.display = "block";
+        }, 1000);
+
+        // inimioare
+        setInterval(createHeart, 300);
+    });
+
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (Math.random() * 2 + 3) + "s";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 5000);
+    }
+</script>
+
+</body>
+</html>
